@@ -76,5 +76,14 @@ func (m *slackManager) ListenAndRespond() {
 
 func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) {
 	searchResult, _ /*res*/, _ /*err*/ := m.client.Hearthstone().Cards(query)
-	m.rtm.SendMessage(m.rtm.NewOutgoingMessage(searchResult.Cards[0].Name, ev.Channel))
+
+	var message string
+	if searchResult.CardCount < 1 {
+		message = "No results found"
+	} else if searchResult.CardCount > 1 {
+		message = fmt.Sprintf("Multiple results match '%s', be more specific", query)
+	} else {
+		message = searchResult.Cards[0].Name
+	}
+	m.rtm.SendMessage(m.rtm.NewOutgoingMessage(message, ev.Channel))
 }
