@@ -14,15 +14,16 @@ type SearchResult struct {
 }
 
 type CardData struct {
-	ID       int    `json:"id"`
-	Attack   int    `json:"attack"`
-	Health   int    `json:"health"`
-	ManaCost int    `json:"manaCost"`
-	RarityID int    `json:"rarityId"`
-	Name     string `json:"name"`
-	Text     string `json:"text"`
-	Flavor   string `json:"flavorText"`
-	Image    string `json:"image"`
+	ID         int    `json:"id"`
+	Attack     int    `json:"attack"`
+	Health     int    `json:"health"`
+	ManaCost   int    `json:"manaCost"`
+	RarityID   int    `json:"rarityId"`
+	Name       string `json:"name"`
+	Text       string `json:"text"`
+	Flavor     string `json:"flavorText"`
+	Image      string `json:"image"`
+	CardTypeID int    `json:"cardTypeId"`
 }
 
 func baseQuery() url.Values {
@@ -49,8 +50,4 @@ func (s *HearthService) Cards(filter string) (*SearchResult, *Response, error) {
 	}
 
 	return &cards, resp, nil
-}
-
-func (s *HearthService) Rafaam() (*SearchResult, *Response, error) {
-	return s.Cards("thief rafaam")
 }

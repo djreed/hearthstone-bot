@@ -5,8 +5,10 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 
 	bnet "github.com/djreed/hearthstone-bot/battlenet"
+	"github.com/lunny/html2md"
 	"github.com/nlopes/slack"
 )
 
@@ -16,6 +18,7 @@ const (
 
 type slackManager struct {
 	client *bnet.Client
+	api    *slack.Client
 	rtm    *slack.RTM
 }
 
@@ -29,6 +32,7 @@ func NewManager(slackToken string, client *bnet.Client) *slackManager {
 
 	return &slackManager{
 		client: client,
+		api:    api,
 		rtm:    rtm,
 	}
 }
@@ -50,6 +54,7 @@ func (m *slackManager) ListenAndRespond() {
 			captureMatcher := regexp.MustCompile(CAPTURE_REGEX)
 			if captureMatcher.MatchString(text) {
 				query := captureMatcher.FindStringSubmatch(text)[1]
+				log.Printf("%s: Querying for '%s'", ev.Username, query)
 				m.handleQuery(ev, query)
 			}
 
@@ -77,13 +82,53 @@ func (m *slackManager) ListenAndRespond() {
 func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) {
 	searchResult, _ /*res*/, _ /*err*/ := m.client.Hearthstone().Cards(query)
 
-	var message string
 	if searchResult.CardCount < 1 {
-		message = "No results found"
+		message := fmt.Sprintf("No results found for '%s'", query)
+		log.Printf("%s: %s", ev.Username, message)
+		m.api.SendMessage(ev.Channel,
+			slack.MsgOptionText(message, false),
+		)
 	} else if searchResult.CardCount > 1 {
-		message = fmt.Sprintf("Multiple results match '%s', be more specific", query)
+		message := fmt.Sprintf("More than one result found for '%s'", query)
+		log.Printf("%s: %s", ev.Username, message)
+		m.api.SendMessage(ev.Channel,
+			slack.MsgOptionText(message, false),
+		)
 	} else {
-		message = searchResult.Cards[0].Name
+		card := searchResult.Cards[0]
+		m.api.SendMessage(ev.Channel,
+			slack.MsgOptionAttachments(
+				slack.Attachment{
+					Text:     FormatCardString(card),
+					ThumbURL: card.Image,
+				},
+			),
+		)
 	}
-	m.rtm.SendMessage(m.rtm.NewOutgoingMessage(message, ev.Channel))
+}
+
+func FormatCardString(card bnet.CardData) string {
+	switch card.CardTypeID {
+	case 4: // Minion
+		return strings.Join([]string{
+			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
+			fmt.Sprintf("%s", html2md.Convert(card.Text)),
+			fmt.Sprintf("_%s_", card.Flavor),
+			fmt.Sprintf("*%d/%d*", card.Attack, card.Health),
+		}, "\n")
+
+	case 5: // Spell
+		return strings.Join([]string{
+			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
+			fmt.Sprintf("%s", html2md.Convert(card.Text)),
+			fmt.Sprintf("_%s_", card.Flavor),
+		}, "\n")
+
+	case 3: // Hero
+	case 7: // Weapon
+	default:
+		log.Printf("UNKNOWN CARD TYPE FOR %s: %d", card.Name, card.CardTypeID)
+	}
+	return ""
+
 }
