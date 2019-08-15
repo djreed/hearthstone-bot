@@ -1,4 +1,4 @@
-package blizzard
+package oauth
 
 import (
 	"fmt"

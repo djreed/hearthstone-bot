@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/djreed/hearthstone-bot/blizzard"
+	oauth "github.com/djreed/hearthstone-bot/oauth"
 )
 
 var BlizzardClientID string
@@ -16,7 +16,7 @@ func main() {
 	id := getBlizzardID()
 	secret := getBlizzardSecret()
 
-	client := blizzard.GetAuthedClient(id, secret)
+	client := oauth.BlizzardOAuthClient(id, secret)
 
 	if data, _, err := client.Hearthstone().Rafaam(); err != nil {
 		panic(err)

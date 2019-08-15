@@ -1,4 +1,4 @@
-package blizzard
+package oauth
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	bnet "github.com/djreed/hearthstone-bot/battlenet"
 )
 
-func GetAuthedClient(id, secret string) *bnet.Client {
+func BlizzardOAuthClient(id, secret string) *bnet.Client {
 	endpoint := Endpoint("us")
 
 	oauthCfg := &clientAuth.Config{
