@@ -96,6 +96,7 @@ func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) {
 		)
 	} else {
 		card := searchResult.Cards[0]
+		log.Printf("%s: found '%s'", ev.Username, card.Name)
 		m.api.SendMessage(ev.Channel,
 			slack.MsgOptionAttachments(
 				slack.Attachment{
