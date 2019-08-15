@@ -74,5 +74,5 @@ func getSlackToken() string {
 		}
 	}
 
-	return BlizzardClientSecret
+	return SlackToken
 }
