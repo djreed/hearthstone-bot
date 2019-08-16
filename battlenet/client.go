@@ -17,28 +17,12 @@ const (
 	BASE_URL_FORMAT = "https://%s.api.blizzard.com/"
 )
 
-// Client is the API client for Battle.net. Create this using NewClient.
-// This can also be constructed manually but it isn't recommended.
 type Client struct {
-	// Client is the HTTP client to use for communication.
-	Client *http.Client
-
-	// BaseURL is the base URL for API requests. This should match
-	// the region with the auth region used for Client.
-	BaseURL *url.URL
-
-	// UserAgent is the user agent to set on API requests.
+	Client    *http.Client
+	BaseURL   *url.URL
 	UserAgent string
 }
 
-// NewClient creates a new Battle.net client.
-//
-// region must be a valid Battle.net region. This will not validate it
-// is valid.
-//
-// The http.Client argument should usually be retrieved via the
-// oauth2 Go library NewClient function. It must be a client that
-// automatically injects authentication details into requests.
 func NewClient(region string, c *http.Client) *Client {
 	region = strings.ToLower(region)
 
@@ -46,7 +30,6 @@ func NewClient(region string, c *http.Client) *Client {
 		c = http.DefaultClient
 	}
 
-	// Determine the API base URL based on the region
 	baseURLStr := fmt.Sprintf(BASE_URL_FORMAT, region)
 
 	baseURL, err := url.Parse(baseURLStr)
@@ -67,11 +50,6 @@ func (c *Client) Hearthstone() *HearthService {
 	return &HearthService{client: c}
 }
 
-// NewRequest creates an API request. A relative URL can be provided in urlStr,
-// in which case it is resolved relative to the BaseURL of the Client.
-// Relative URLs should always be specified without a preceding slash.  If
-// specified, the value pointed to by body is JSON encoded and included as the
-// request body.
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	rel, err := url.Parse(urlStr)
 	if err != nil {
@@ -102,11 +80,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	return req, nil
 }
 
-// Do sends an API request and returns the API response. The API response is
-// JSON decoded and stored in the value pointed to by v, or returned as an
-// error if an API error has occurred.  If v implements the io.Writer
-// interface, the raw response body will be written to v, without attempting to
-// first decode it.
 func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 	resp, err := c.Client.Do(req)
 	if err != nil {
