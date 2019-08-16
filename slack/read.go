@@ -53,9 +53,10 @@ func (m *slackManager) ListenAndRespond() {
 			text := ev.Text
 			captureMatcher := regexp.MustCompile(CAPTURE_REGEX)
 			if captureMatcher.MatchString(text) {
-				query := captureMatcher.FindStringSubmatch(text)[1]
-				log.Printf("%s: Querying for '%s'", ev.Username, query)
-				m.handleQuery(ev, query)
+				for _, matches := range captureMatcher.FindAllStringSubmatch(text, -1) {
+					log.Printf("%s: Querying for '%s'", ev.User, matches[1])
+					m.handleQuery(ev, matches[1])
+				}
 			}
 
 		case *slack.PresenceChangeEvent:
@@ -84,19 +85,19 @@ func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) {
 
 	if searchResult.CardCount < 1 {
 		message := fmt.Sprintf("No results found for '%s'", query)
-		log.Printf("%s: %s", ev.Username, message)
+		log.Printf("%s: %s", ev.User, message)
 		m.api.SendMessage(ev.Channel,
 			slack.MsgOptionText(message, false),
 		)
 	} else if searchResult.CardCount > 1 {
 		message := fmt.Sprintf("More than one result found for '%s'", query)
-		log.Printf("%s: %s", ev.Username, message)
+		log.Printf("%s: %s", ev.User, message)
 		m.api.SendMessage(ev.Channel,
 			slack.MsgOptionText(message, false),
 		)
 	} else {
 		card := searchResult.Cards[0]
-		log.Printf("%s: found '%s'", ev.Username, card.Name)
+		log.Printf("%s: found '%s'", ev.User, card.Name)
 		m.api.SendMessage(ev.Channel,
 			slack.MsgOptionAttachments(
 				slack.Attachment{
@@ -113,7 +114,7 @@ func FormatCardString(card bnet.CardData) string {
 	case 4: // Minion
 		return strings.Join([]string{
 			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
-			fmt.Sprintf("%s", html2md.Convert(card.Text)),
+			fmt.Sprintf("%s", fixBoldText(card.Text)),
 			fmt.Sprintf("_%s_", card.Flavor),
 			fmt.Sprintf("*%d/%d*", card.Attack, card.Health),
 		}, "\n")
@@ -121,7 +122,7 @@ func FormatCardString(card bnet.CardData) string {
 	case 5: // Spell
 		return strings.Join([]string{
 			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
-			fmt.Sprintf("%s", html2md.Convert(card.Text)),
+			fmt.Sprintf("%s", fixBoldText(card.Text)),
 			fmt.Sprintf("_%s_", card.Flavor),
 		}, "\n")
 
@@ -132,4 +133,8 @@ func FormatCardString(card bnet.CardData) string {
 	}
 	return ""
 
+}
+
+func fixBoldText(text string) string {
+	return strings.Replace(html2md.Convert(text), "**", "*", -1)
 }
