@@ -94,7 +94,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 
 	defer func() {
 		// Drain up to 512 bytes and close the body to let the Transport reuse the connection
-		io.CopyN(ioutil.Discard, resp.Body, 2048)
+		io.CopyN(ioutil.Discard, resp.Body, 512)
 		resp.Body.Close()
 	}()
 
