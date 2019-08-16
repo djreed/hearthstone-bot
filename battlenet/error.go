@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// ErrorResponse is the error response structure from the Battle.net API
+// Battlenet's error response
 type ErrorResponse struct {
 	Response *http.Response
 
@@ -20,7 +20,6 @@ func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%s: %s", r.Code, r.Description)
 }
 
-// CheckError checks for an error in the given response.
 func CheckError(r *http.Response) error {
 	if c := r.StatusCode; 200 <= c && c <= 299 {
 		return nil

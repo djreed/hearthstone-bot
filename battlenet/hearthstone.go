@@ -6,6 +6,7 @@ type HearthService struct {
 	client *Client
 }
 
+// Set of all matching cards from query
 type SearchResult struct {
 	CardCount int        `json:"cardCount"`
 	Cards     []CardData `json:"cards"`
@@ -13,6 +14,7 @@ type SearchResult struct {
 	PageCount int        `json:"pageCount"`
 }
 
+// Hearthstone card data
 type CardData struct {
 	ID         int    `json:"id"`
 	Attack     int    `json:"attack"`

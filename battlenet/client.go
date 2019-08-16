@@ -17,9 +17,15 @@ const (
 	BASE_URL_FORMAT = "https://%s.api.blizzard.com/"
 )
 
+// Battlenet API client
 type Client struct {
-	Client    *http.Client
-	BaseURL   *url.URL
+	// Authed HTTP client for requests
+	Client *http.Client
+
+	// API base URL
+	BaseURL *url.URL
+
+	// Client's HTTP UserAgent
 	UserAgent string
 }
 

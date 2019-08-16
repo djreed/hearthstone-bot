@@ -6,8 +6,7 @@ import (
 	"time"
 )
 
-// Reponse is a Battle.net API response. This wraps the standard http.Response
-// and provides convenient access to some of the metadata returned.
+// Parsed HTTP response from Battlenet w/ metadata
 type Response struct {
 	*http.Response
 

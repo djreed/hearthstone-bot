@@ -8,31 +8,25 @@ import (
 )
 
 var (
-	// mux is the HTTP request multiplexer used with the test server.
+	// HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
 
-	// client is the Battle.net client being tested.
+	// Battle.net client being tested.
 	client *Client
 
-	// server is a test HTTP server used to provide mock API responses.
+	// Test HTTP server used to provide mock API responses.
 	server *httptest.Server
 )
 
-// setup sets up a test HTTP server along with a Client that is
-// configured to talk to that test server.  Tests should register handlers on
-// mux which provide mock responses for the API method being tested.
 func setup() {
-	// test server
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	// client configured to use test server
 	client = NewClient("us", nil)
 	url, _ := url.Parse(server.URL)
 	client.BaseURL = url
 }
 
-// teardown closes the test HTTP server.
 func teardown() {
 	server.Close()
 }
