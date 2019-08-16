@@ -5,10 +5,6 @@ import (
 	slack "github.com/djreed/hearthstone-bot/slack"
 )
 
-var BlizzardClientID string
-var BlizzardClientSecret string
-var SlackToken string
-
 func main() {
 	blizzID := getBlizzardID()
 	blizzSecret := getBlizzardSecret()

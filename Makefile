@@ -9,9 +9,8 @@ docker:
 
 build:
 	go build -o $(BINARY) $(LD_FLAGS) .
-		
 
-run:
+run: docker
 	docker run --rm \
 		-e BLIZZARD_ID \
 		-e BLIZZARD_SECRET \

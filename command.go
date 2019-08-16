@@ -6,40 +6,31 @@ import (
 )
 
 func getBlizzardID() string {
-	if BlizzardClientID == "" {
-		log.Print("Blizzard ID not provided in build env, searching runtime env")
-
-		if BlizzardClientID = os.Getenv("BLIZZARD_ID"); BlizzardClientID == "" {
-			log.Fatal("Failed to find Blizzard ID in environment, exiting")
-			os.Exit(1)
-		}
+	if BlizzardClientID := os.Getenv("BLIZZARD_ID"); BlizzardClientID != "" {
+		log.Println("Found Blizzard ID")
+		return BlizzardClientID
 	}
-
-	return BlizzardClientID
+	log.Fatal("Failed to find Blizzard ID in environment, exiting")
+	os.Exit(1)
+	return ""
 }
 
 func getBlizzardSecret() string {
-	if BlizzardClientSecret == "" {
-		log.Print("Blizzard Secret not provided in build env, searching runtime env")
-
-		if BlizzardClientSecret = os.Getenv("BLIZZARD_SECRET"); BlizzardClientSecret == "" {
-			log.Print("Failed to find Blizzard Secret in environment, exiting")
-			os.Exit(1)
-		}
+	if blizzardClientSecret := os.Getenv("BLIZZARD_SECRET"); blizzardClientSecret != "" {
+		log.Println("Found Blizzard Secret")
+		return blizzardClientSecret
 	}
-
-	return BlizzardClientSecret
+	log.Print("Failed to find Blizzard Secret in environment, exiting")
+	os.Exit(1)
+	return ""
 }
 
 func getSlackToken() string {
-	if SlackToken == "" {
-		log.Print("Slack Token not provided in build env, searching runtime env")
-
-		if SlackToken = os.Getenv("SLACK_TOKEN"); SlackToken == "" {
-			log.Print("Failed to find Slack Token in environment, exiting")
-			os.Exit(1)
-		}
+	if slackToken := os.Getenv("SLACK_TOKEN"); slackToken != "" {
+		log.Println("Found Slack Token")
+		return slackToken
 	}
-
-	return SlackToken
+	log.Print("Failed to find Slack Token in environment, exiting")
+	os.Exit(1)
+	return ""
 }

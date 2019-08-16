@@ -6,6 +6,7 @@ ADD oauth/ ./oauth
 ADD battlenet/ ./battlenet
 ADD slack/ ./slack
 ADD sanitize/ ./sanitize
+ADD certs/ ./certs
 ADD ./*.go ./
 
 # Build it:
