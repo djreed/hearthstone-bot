@@ -113,16 +113,21 @@ func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) slack.A
 
 func cardAsAttachment(card bnet.CardData) slack.Attachment {
 	return slack.Attachment{
-		Text:     formatCardString(card),
-		ThumbURL: card.Image,
+		Title:     formatCardTitle(card),
+		TitleLink: card.CardURL(),
+		Text:      formatCardString(card),
+		ThumbURL:  card.Image,
 	}
+}
+
+func formatCardTitle(card bnet.CardData) string {
+	return fmt.Sprintf("{%d} %s", card.ManaCost, card.Name)
 }
 
 func formatCardString(card bnet.CardData) string {
 	switch card.CardTypeID {
 	case 4: // Minion
 		return strings.Join([]string{
-			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
 			fmt.Sprintf("%s", fixBoldText(card.Text)),
 			fmt.Sprintf("_%s_", card.Flavor),
 			fmt.Sprintf("*%d/%d*", card.Attack, card.Health),
@@ -130,13 +135,23 @@ func formatCardString(card bnet.CardData) string {
 
 	case 5: // Spell
 		return strings.Join([]string{
-			fmt.Sprintf("{%d} *%s*", card.ManaCost, card.Name),
 			fmt.Sprintf("%s", fixBoldText(card.Text)),
 			fmt.Sprintf("_%s_", card.Flavor),
 		}, "\n")
 
 	case 3: // Hero
+		return strings.Join([]string{
+			fmt.Sprintf("%s", fixBoldText(card.Text)),
+			fmt.Sprintf("_%s_", card.Flavor),
+		}, "\n")
+
 	case 7: // Weapon
+		return strings.Join([]string{
+			fmt.Sprintf("%s", fixBoldText(card.Text)),
+			fmt.Sprintf("_%s_", card.Flavor),
+			fmt.Sprintf("*%d/%d*", card.Attack, card.Durability),
+		}, "\n")
+
 	default:
 		log.Printf("UNKNOWN CARD TYPE FOR %s: %d", card.Name, card.CardTypeID)
 	}

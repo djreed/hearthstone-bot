@@ -1,6 +1,13 @@
 package battlenet
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
+
+const (
+	HEARTH_CARD_URL = "https://playhearthstone.com/en-us/cards"
+)
 
 type HearthService struct {
 	client *Client
@@ -26,6 +33,7 @@ type CardData struct {
 	Flavor     string `json:"flavorText"`
 	Image      string `json:"image"`
 	CardTypeID int    `json:"cardTypeId"`
+	Durability int    `json:"durability"`
 }
 
 func baseQuery() url.Values {
@@ -52,4 +60,8 @@ func (s *HearthService) Cards(filter string) (*SearchResult, *Response, error) {
 	}
 
 	return &cards, resp, nil
+}
+
+func (card *CardData) CardURL() string {
+	return fmt.Sprintf("%s/%d", HEARTH_CARD_URL, card.ID)
 }
