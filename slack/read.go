@@ -55,7 +55,12 @@ func (m *slackManager) ListenAndRespond() {
 			if captureMatcher.MatchString(text) {
 				for _, matches := range captureMatcher.FindAllStringSubmatch(text, -1) {
 					log.Printf("%s: Querying for '%s'", ev.User, matches[1])
-					m.handleQuery(ev, matches[1])
+					attachment := m.handleQuery(ev, matches[1])
+					m.api.SendMessage(ev.Channel,
+						slack.MsgOptionAttachments(
+							attachment,
+						),
+					)
 				}
 			}
 
@@ -80,36 +85,40 @@ func (m *slackManager) ListenAndRespond() {
 	}
 }
 
-func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) {
+func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) slack.Attachment {
 	searchResult, _ /*res*/, _ /*err*/ := m.client.Hearthstone().Cards(query)
 
 	if searchResult.CardCount < 1 {
 		message := fmt.Sprintf("No results found for '%s'", query)
 		log.Printf("%s: %s", ev.User, message)
-		m.api.SendMessage(ev.Channel,
-			slack.MsgOptionText(message, false),
-		)
+		return slack.Attachment{
+			Text: message,
+		}
 	} else if searchResult.CardCount > 1 {
+		for _, card := range searchResult.Cards {
+			if strings.EqualFold(card.Name, query) {
+				log.Printf("%s: found '%s'", ev.User, card.Name)
+				return cardAsAttachment(card)
+			}
+		}
 		message := fmt.Sprintf("More than one result found for '%s'", query)
 		log.Printf("%s: %s", ev.User, message)
-		m.api.SendMessage(ev.Channel,
-			slack.MsgOptionText(message, false),
-		)
+		return slack.Attachment{Text: message}
 	} else {
 		card := searchResult.Cards[0]
 		log.Printf("%s: found '%s'", ev.User, card.Name)
-		m.api.SendMessage(ev.Channel,
-			slack.MsgOptionAttachments(
-				slack.Attachment{
-					Text:     FormatCardString(card),
-					ThumbURL: card.Image,
-				},
-			),
-		)
+		return cardAsAttachment(card)
 	}
 }
 
-func FormatCardString(card bnet.CardData) string {
+func cardAsAttachment(card bnet.CardData) slack.Attachment {
+	return slack.Attachment{
+		Text:     formatCardString(card),
+		ThumbURL: card.Image,
+	}
+}
+
+func formatCardString(card bnet.CardData) string {
 	switch card.CardTypeID {
 	case 4: // Minion
 		return strings.Join([]string{
