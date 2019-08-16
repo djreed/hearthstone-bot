@@ -2,7 +2,10 @@ package battlenet
 
 import (
 	"fmt"
+	"log"
 	"net/url"
+
+	"github.com/djreed/hearthstone-bot/sanitize"
 )
 
 const (
@@ -45,9 +48,14 @@ func baseQuery() url.Values {
 func (s *HearthService) Cards(filter string) (*SearchResult, *Response, error) {
 	req, err := s.client.NewRequest("GET", "hearthstone/cards", nil)
 
+	cleanFilter := sanitize.SanitizeString(filter)
 	query := baseQuery()
-	query.Add("textFilter", filter)
+	query.Add("textFilter", cleanFilter)
 	req.URL.RawQuery = query.Encode()
+
+	log.Println("Raw Path: " + req.URL.RawPath)
+	log.Println("Escaped: " + req.URL.EscapedPath())
+	log.Println("Raw Query: " + req.URL.RawQuery)
 
 	if err != nil {
 		return nil, nil, err
