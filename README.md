@@ -15,17 +15,18 @@ If no cards are found, or there are more than one non-exact matches, you'll be t
 ## Requirements
 
 Three environment variables:
-- BLIZZARD_ID, your Blizzard API ID
-- BLIZZARD_SECRET, the secret key for your Blizzard API
-- SLACK_TOKEN, the initial token for your registered Slack bot user, for OAuth
+- `BLIZZARD_ID`, your Blizzard API ID
+- `BLIZZARD_SECRET`, the secret key for your Blizzard API
+- `SLACK_TOKEN`, the initial token for your registered Slack bot user, for OAuth
 
 ## Build
 
 This project uses go modules for version consistency. 
-To download vendor packages locally: `GO111MODULE=on go mod vendor`. 
-The makefile provided should give you a good setup: `make build`.
+To download vendor packages locally: `make vendor`.
 
-Beyond the binary, this application is meant to be built and ran via Docker: `make docker` or `make run`
+Afterwards you can build a binary for the bot: `make build`.
+
+Beyond the binary, this application is meant to be built and ran via Docker: `make docker` and/or `make run`.
 
 ## Deploy
 
