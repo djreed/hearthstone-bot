@@ -1,0 +1,75 @@
+{
+	"ImportPath": "github.com/djreed/hearthstone-bot",
+	"GoVersion": "go1.11",
+	"GodepVersion": "v80",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/davecgh/go-spew/spew",
+			"Comment": "v1.1.1-1-gd8f796a",
+			"Rev": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.4.0-13-gae1634f",
+			"Rev": "ae1634f6a98965ded3b8789c626cb4e0bd78c3de"
+		},
+		{
+			"ImportPath": "github.com/lunny/html2md",
+			"Rev": "7d234de445465c85c3b248980bad14603e4654b6"
+		},
+		{
+			"ImportPath": "github.com/nlopes/slack",
+			"Comment": "v0.5.0-116-g0492f2f",
+			"Rev": "0492f2f7dba43c42ad7348e010fdfa5491b6bb77"
+		},
+		{
+			"ImportPath": "github.com/nlopes/slack/internal/errorsx",
+			"Comment": "v0.5.0-116-g0492f2f",
+			"Rev": "0492f2f7dba43c42ad7348e010fdfa5491b6bb77"
+		},
+		{
+			"ImportPath": "github.com/nlopes/slack/internal/timex",
+			"Comment": "v0.5.0-116-g0492f2f",
+			"Rev": "0492f2f7dba43c42ad7348e010fdfa5491b6bb77"
+		},
+		{
+			"ImportPath": "github.com/nlopes/slack/slackutilsx",
+			"Comment": "v0.5.0-116-g0492f2f",
+			"Rev": "0492f2f7dba43c42ad7348e010fdfa5491b6bb77"
+		},
+		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.0-13-gc059e47",
+			"Rev": "c059e472caf75dbe73903f6521a20abac245b17f"
+		},
+		{
+			"ImportPath": "github.com/pmezard/go-difflib/difflib",
+			"Comment": "v1.0.0-4-g5d4384e",
+			"Rev": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Comment": "v1.2.2-10-g04af852",
+			"Rev": "04af85275a5c7ac09d16bb3b9b2e751ed45154e5"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context/ctxhttp",
+			"Rev": "74dc4d7220e7acc4e100824340f3e66577424772"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/clientcredentials",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/internal",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		}
+	]
+}
