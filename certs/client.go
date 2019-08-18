@@ -6,9 +6,17 @@ import (
 	"net/http"
 )
 
-func HTTPSClient() *http.Client {
-	pool := x509.NewCertPool()
+var (
+	pool   *x509.CertPool
+	client *http.Client
+)
+
+func init() {
+	pool = x509.NewCertPool()
 	pool.AppendCertsFromPEM(pemCerts)
-	httpsClient := &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool}}}
-	return httpsClient
+	client = &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool}}}
+}
+
+func HTTPSClient() *http.Client {
+	return client
 }
