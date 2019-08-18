@@ -1,16 +1,16 @@
-FROM golang:1.8
+FROM golang:1.12
 
 # Add the source code:
 WORKDIR /go/src/github.com/djreed/hearthstone-bot/
-ADD oauth/ ./oauth
+ADD oauth ./oauth
 ADD battlenet/ ./battlenet
 ADD slack/ ./slack
 ADD sanitize/ ./sanitize
 ADD ssl/ ./ssl
-ADD ./*.go ./
+ADD ./*.go go.mod go.sum ./
 
 # Build it:
-ADD vendor/ ./vendor
+RUN GO111MODULE=on go mod vendor
 RUN CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o hearthstone-bot .
 
 # Executable container

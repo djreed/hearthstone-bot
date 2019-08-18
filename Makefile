@@ -3,10 +3,13 @@ BINARY="hearthstone-bot"
 
 default: run
 
-docker:
+docker: vendor
 	docker build -t ${APPNAME} -f Dockerfile .
 
-build:
+vendor:
+	GO111MODULE=on go mod vendor
+
+build: vendor
 	go build -o ${BINARY} .
 
 run: docker

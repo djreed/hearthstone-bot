@@ -11,3 +11,13 @@ In the channel the application is installed into, typing any sort of query abidi
 If no cards are found, or there are more than one non-exact matches, you'll be told as much:
 
 ![](sample-error.png)
+
+## Build
+
+This project uses go modules for version consistency. 
+To download vendor packages locally: `GO111MODULE=on go mod vendor`. 
+The makefile provided should give you a good setup: `make build`.
+
+Beyond the golang binary, this application is meant to be built and ran via Docker: `make docker`
+
+## Deploy
