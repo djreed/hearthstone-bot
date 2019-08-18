@@ -65,22 +65,22 @@ func (m *slackManager) ListenAndRespond() {
 			}
 
 		case *slack.PresenceChangeEvent:
-			// log.Printf("Presence Change: %v\n", ev)
+			log.Printf("Presence Change: %v\n", ev)
 
 		case *slack.LatencyReport:
-			// fmt.Printf("Current latency: %v\n", ev.Value)
+			fmt.Printf("Current latency: %v\n", ev.Value)
 
 		case *slack.RTMError:
-			// log.Printf("Error: %s\n", ev.Error())
+			log.Printf("Error: %s\n", ev.Error())
 
 		case *slack.InvalidAuthEvent:
-			// log.Fatalf("Invalid credentials")
-			// return
+			log.Fatalf("Invalid credentials")
+			return
 
 		default:
-
 			// Ignore other events..
-			// fmt.Printf("Unexpected: %v\n", msg.Data)
+			log.Printf("Unexpected Event: %v\n", msg.Data)
+
 		}
 	}
 }
