@@ -6,12 +6,12 @@ ADD oauth/ ./oauth
 ADD battlenet/ ./battlenet
 ADD slack/ ./slack
 ADD sanitize/ ./sanitize
-ADD certs/ ./certs
+ADD ssl/ ./ssl
 ADD ./*.go ./
 
 # Build it:
 RUN go get -d -v ./...
-RUN CGO_ENABLED=0 GOOS=linux GODEBUG=netdns=cgo go build -a -tags netgo -ldflags '-w' -o hearthstone-bot .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o hearthstone-bot .
 
 # Executable container
 FROM alpine

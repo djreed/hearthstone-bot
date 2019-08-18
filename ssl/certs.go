@@ -1,4 +1,4 @@
-package certs
+package ssl
 
 // Taken from https://github.com/kelseyhightower/contributors
 

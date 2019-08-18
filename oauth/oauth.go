@@ -6,11 +6,11 @@ import (
 	"golang.org/x/oauth2"
 	clientAuth "golang.org/x/oauth2/clientcredentials"
 
-	"github.com/djreed/hearthstone-bot/battlenet"
-	"github.com/djreed/hearthstone-bot/certs"
+	bnet "github.com/djreed/hearthstone-bot/battlenet"
+	ssl "github.com/djreed/hearthstone-bot/ssl"
 )
 
-func BlizzardOAuthClient(id, secret string) *battlenet.Client {
+func BlizzardOAuthClient(id, secret string) *bnet.Client {
 	endpoint := Endpoint("us")
 
 	oauthCfg := &clientAuth.Config{
@@ -20,10 +20,10 @@ func BlizzardOAuthClient(id, secret string) *battlenet.Client {
 	}
 
 	ctx := context.TODO()
-	httpsClient := certs.HTTPSClient()
+	httpsClient := ssl.HTTPSClient()
 	ctx = context.WithValue(ctx, oauth2.HTTPClient, httpsClient)
 	authClient := oauthCfg.Client(ctx)
-	client := battlenet.NewClient("us", authClient)
+	client := bnet.NewClient("us", authClient)
 
 	return client
 }
