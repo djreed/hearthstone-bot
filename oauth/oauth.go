@@ -3,9 +3,11 @@ package oauth
 import (
 	"context"
 
+	"golang.org/x/oauth2"
 	clientAuth "golang.org/x/oauth2/clientcredentials"
 
 	"github.com/djreed/hearthstone-bot/battlenet"
+	"github.com/djreed/hearthstone-bot/certs"
 )
 
 func BlizzardOAuthClient(id, secret string) *battlenet.Client {
@@ -17,16 +19,9 @@ func BlizzardOAuthClient(id, secret string) *battlenet.Client {
 		TokenURL:     endpoint.TokenURL,
 	}
 
-	// ctx := context.TODO()
-	// authClient := oauthCfg.Client(ctx)
-	// client := battlenet.NewClient("us", authClient)
-
-	// pool := x509.NewCertPool()
-	// pool.AppendCertsFromPEM(pemCerts)
-	// httpsClient := &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool}}}
-	// httpsClient := &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
 	ctx := context.TODO()
-	// ctx = context.WithValue(ctx, oauth2.HTTPClient, httpsClient)
+	httpsClient := certs.HTTPSClient()
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, httpsClient)
 	authClient := oauthCfg.Client(ctx)
 	client := battlenet.NewClient("us", authClient)
 

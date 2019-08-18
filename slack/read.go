@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	bnet "github.com/djreed/hearthstone-bot/battlenet"
+	"github.com/djreed/hearthstone-bot/certs"
 	"github.com/lunny/html2md"
 	"github.com/nlopes/slack"
 )
@@ -23,9 +24,12 @@ type slackManager struct {
 }
 
 func NewManager(slackToken string, client *bnet.Client) *slackManager {
+	httpsClient := certs.HTTPSClient()
+
 	api := slack.New(
 		slackToken,
 		slack.OptionLog(log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)),
+		slack.OptionHTTPClient(httpsClient),
 	)
 
 	rtm := api.NewRTM()
