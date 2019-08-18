@@ -2,15 +2,7 @@
 	"ImportPath": "github.com/djreed/hearthstone-bot",
 	"GoVersion": "go1.11",
 	"GodepVersion": "v80",
-	"Packages": [
-		"./..."
-	],
 	"Deps": [
-		{
-			"ImportPath": "github.com/davecgh/go-spew/spew",
-			"Comment": "v1.1.1-1-gd8f796a",
-			"Rev": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d"
-		},
 		{
 			"ImportPath": "github.com/gorilla/websocket",
 			"Comment": "v1.4.0-13-gae1634f",
@@ -44,16 +36,6 @@
 			"ImportPath": "github.com/pkg/errors",
 			"Comment": "v0.8.0-13-gc059e47",
 			"Rev": "c059e472caf75dbe73903f6521a20abac245b17f"
-		},
-		{
-			"ImportPath": "github.com/pmezard/go-difflib/difflib",
-			"Comment": "v1.0.0-4-g5d4384e",
-			"Rev": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc"
-		},
-		{
-			"ImportPath": "github.com/stretchr/testify/assert",
-			"Comment": "v1.2.2-10-g04af852",
-			"Rev": "04af85275a5c7ac09d16bb3b9b2e751ed45154e5"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context/ctxhttp",
