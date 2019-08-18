@@ -83,7 +83,7 @@ func (m *slackManager) ListenAndRespond() {
 
 		default:
 			// Ignore other events..
-			log.Printf("Unexpected Event: %v -- %v\n", msg.Type, msg.Data)
+			// log.Printf("Unexpected Event: %v -- %v\n", msg.Type, msg.Data)
 
 		}
 	}
