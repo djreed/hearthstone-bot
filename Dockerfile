@@ -1,7 +1,7 @@
 FROM golang:1.8
 
 # Add the source code:
-WORKDIR /app/
+WORKDIR /go/src/github.com/djreed/hearthstone-bot/
 ADD oauth/ ./oauth
 ADD battlenet/ ./battlenet
 ADD slack/ ./slack
@@ -10,7 +10,7 @@ ADD ssl/ ./ssl
 ADD ./*.go ./
 
 # Build it:
-RUN go get -d -v ./...
+ADD vendor/ ./vendor
 RUN CGO_ENABLED=0 GOOS=linux go build -a -tags netgo -ldflags '-w' -o hearthstone-bot .
 
 # Executable container
@@ -18,6 +18,6 @@ FROM alpine
 
 WORKDIR /app/
 
-COPY --from=0 /app/hearthstone-bot .
+COPY --from=0 /go/src/github.com/djreed/hearthstone-bot/hearthstone-bot .
 
 CMD ["/app/hearthstone-bot"]
