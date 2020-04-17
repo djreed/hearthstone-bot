@@ -90,6 +90,7 @@ func (m *slackManager) ListenAndRespond() {
 }
 
 func (m *slackManager) handleQuery(ev *slack.MessageEvent, query string) slack.Attachment {
+	log.Printf("Searching Hearthstone data for '%s'", query)
 	searchResult, _ /*res*/, _ /*err*/ := m.client.Hearthstone().Cards(query)
 
 	if searchResult.CardCount < 1 {
